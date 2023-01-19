@@ -12,7 +12,7 @@ export default function MemeList ({data}: MemesListProps) {
     console.log(data)
 
     return (
-        <ul className="flex flex-col items-center gap-5 w-full py-10">
+        <ul className="flex flex-col items-center gap-5 w-full pt-5 pb-10">
             {data.map((meme, index) => (
                 <MemeCard 
                     key={index}

@@ -27,7 +27,6 @@ export default function Home({data}: HomeProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1 className='text-3xl font-medium'>Memerr</h1>
         <MemeList data={data} />
       </main>
     </>
