@@ -14,8 +14,8 @@ export default function MemeCard ({ title, author, url, nsfw, postLink, spoiler,
 
     return (
         <li className="w-[90%] max-w-[450px] flex flex-col items-center gap-5 p-5 bg-gray-900 rounded-md md:w-[25vw] md:min-w-[450px]">
-            <div className="relative w-96 h-96">
-                <Link href={postLink} target='_blank'>
+            <div className="relative w-96 h-96 max-w-[95%] rounded-lg">
+                <Link className="rounded-lg" href={postLink} target='_blank'>
                     <Image className="rounded-lg object-contain w-full" src={url} alt={title} fill placeholder="blur" blurDataURL={preview[0]} />
                 </Link>
             </div>
