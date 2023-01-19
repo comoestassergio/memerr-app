@@ -31,7 +31,7 @@ export default function MemeCard ({ title, author, url, nsfw, postLink, spoiler,
                 <div className="flex items-center justify-between mt-3">
                     <div className="flex items-center gap-2">
                         <BsReddit className="text-xl" />
-                        <Link className="hover:underline" href={`https://www.reddit.com/r/${subreddit}/`} target='_blank'>{subreddit}</Link>
+                        <Link className="hover:underline" href={`https://www.reddit.com/r/${subreddit}/`} target='_blank'>r/{subreddit}</Link>
                     </div>
                     <div className="flex items-center gap-2">
                         <p>{ups}</p>
