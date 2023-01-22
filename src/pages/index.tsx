@@ -26,7 +26,7 @@ type MemesArr = {
 export default function Home() {
 
   const [error, setError] = useState<unknown>()
-  const [memes, setMemes] = useState<Meme [] | null>()
+  const [memes, setMemes] = useState<Meme [] | []>([])
   const [loadingScreen, setLoadingScreen] = useState<boolean>(false)
   const [loadingMoreMemes, setLoadingMoreMemes] = useState<boolean>(false)
   const [currentSubreddit, setCurrentSubreddit] = useState<string | null>('all')
