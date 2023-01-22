@@ -18,7 +18,7 @@ export default function MemeList ({data, loadingScreen}: MemesListProps) {
     }
     
     return (
-        <ul className="flex flex-col items-center gap-5 w-full pt-5 pb-10 md:flex-row md:flex-wrap md:justify-center">
+        <ul className="flex flex-col items-center gap-5 w-full mx-auto pt-5 pb-10 md:w-[75%] md:flex-row md:flex-wrap md:justify-center">
             {data?.map((meme, index) => (
                 <MemeCard 
                     key={index}
