@@ -53,7 +53,7 @@ export default function SectionSelect({ setCurrentsubreddit, currentSubreddit }:
             onSwiper={(swiper) => console.log(swiper)}
         >
             {SUBREDDITS.map(el => (
-                <SwiperSlide className={`px-3 py-1 border-2 max-w-fit border-fuchsia-500 rounded-md text-gray-700 ${currentSubreddit === el.name && 'bg-fuchsia-400 text-purple-900 border-fuchsia-400'}`}>
+                <SwiperSlide key={el.id} className={`px-3 py-1 border-2 max-w-fit border-fuchsia-500 rounded-md text-gray-700 ${currentSubreddit === el.name && 'bg-fuchsia-400 text-purple-900 border-fuchsia-400'}`}>
                     <button onClick={handleClick} type="button" name={el.name}>{el.name}</button>
                 </SwiperSlide>
             ))}
