@@ -1,4 +1,6 @@
 import MemeList from '@/components/MemeList'
+import SectionSelect from '@/components/SectionSelect'
+
 import Head from 'next/head'
 import axios from "axios"
 import { useEffect, useState } from 'react'
@@ -17,39 +19,69 @@ export type Meme = {
   preview: string []
 }
 
-type HomeProps = {
-  data: Meme []
+type MemesArr = {
+  data: Meme [] | null
 }
 
-export default function Home({data}: HomeProps) {
+export default function Home() {
 
   const [error, setError] = useState<unknown>()
-  const [memes, setMemes] = useState(data)
-  const [loadingMemes, setLoadingMemes] = useState<boolean>(false)
+  const [memes, setMemes] = useState<Meme [] | null>()
+  const [loadingScreen, setLoadingScreen] = useState<boolean>(false)
+  const [loadingMoreMemes, setLoadingMoreMemes] = useState<boolean>(false)
+  const [currentSubreddit, setCurrentSubreddit] = useState<string | null>('all')
 
   useEffect(() => {
-    setMemes(data)
-  }, [])
+    fetchMemes()
+    
+  }, [currentSubreddit])
 
 
   const handleLoadMore = async () => {
 
-    setLoadingMemes(true)
+    setLoadingMoreMemes(true)
 
     try {
-        const res = await axios.get('https://meme-api.com/gimme/18')
-        const data = res.data.memes
+      let apiEndPoint
 
-        setMemes(prevMemes => {
-          return [...prevMemes, ...data]
-        })
-        setLoadingMemes(false)
+      if (currentSubreddit === 'all') {
+        apiEndPoint = 'https://meme-api.com/gimme/18'
+      } else {
+        apiEndPoint = `https://meme-api.com/gimme/${currentSubreddit}/18`
+      }
 
-      } catch (error) {
-        setError(error)
-        setLoadingMemes(false)
-      } 
+      const res = await axios.get(apiEndPoint)
+      const data = res.data.memes
+
+      setMemes(prevMemes => {
+        return [...prevMemes, ...data]
+      })
+      setLoadingMoreMemes(false)
+
+    } catch (error) {
+      setError(error)
+      setLoadingMoreMemes(false)
+    } 
    
+  }
+
+  const fetchMemes = async () => {
+
+    setLoadingScreen(true)
+
+    let apiEndPoint
+
+    if (currentSubreddit === 'all') {
+      apiEndPoint = 'https://meme-api.com/gimme/18'
+    } else {
+      apiEndPoint = `https://meme-api.com/gimme/${currentSubreddit}/18`
+    }
+
+    const res = await axios.get(apiEndPoint)
+    const data = res.data.memes
+
+    setMemes(data)
+    setLoadingScreen(false)
   }
 
   return (
@@ -61,35 +93,27 @@ export default function Home({data}: HomeProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className=' bg-gradient-to-b from-gray-100 to-gray-900'>
-        <MemeList data={memes} />
-        <div className='flex items-center justify-center w-full py-5'>
-          <button onClick={handleLoadMore} type='button' className='px-5 py-2 w-[60%] max-w-[250px] bg-fuchsia-400 rounded-md text-lg text-purple-900 font-medium flex items-center h-12 shadow-[0px_0px_14px_2px] shadow-fuchsia-300/50 hover:shadow-[0px_0px_14px_4px] hover:shadow-fuchsia-300/50 hover:text-fuchsia-800 transition-shadow'>
-            <>
-              {loadingMemes && !error &&
-                <CgSpinner className='mx-auto text-2xl animate-spin' />
-              }
-              {!loadingMemes && !error &&
-                <p className='mx-auto  text-sm uppercase transition-colors'>Load more</p>
-              }
-              {error &&
-                <p className='mx-aut text-sm uppercase transition-colors '>Error</p>
-              }
-            </>
-          </button>
-        </div>
+        <SectionSelect setCurrentsubreddit={setCurrentSubreddit} currentSubreddit={currentSubreddit} />
+        <MemeList data={memes} loadingScreen={loadingScreen}/>
+        {!loadingScreen &&
+          <div className='flex items-center justify-center w-full py-5'>
+            <button onClick={handleLoadMore} type='button' className='px-5 py-2 w-[60%] max-w-[250px] bg-fuchsia-400 rounded-md text-lg text-purple-900 font-medium flex items-center h-12 shadow-[0px_0px_14px_2px] shadow-fuchsia-300/50 hover:shadow-[0px_0px_14px_4px] hover:shadow-fuchsia-300/50 hover:text-fuchsia-800 transition-shadow'>
+              <>
+                {loadingMoreMemes && !error &&
+                  <CgSpinner className='mx-auto text-2xl animate-spin' />
+                }
+                {!loadingMoreMemes && !error &&
+                  <p className='mx-auto  text-sm uppercase transition-colors'>Load more</p>
+                }
+                {error &&
+                  <p className='mx-aut text-sm uppercase transition-colors '>Error</p>
+                }
+              </>
+            </button>
+          </div>
+        }
+        
       </div>
     </>
   )
-}
-
-export async function getServerSideProps() {
-
-  const res = await axios.get('https://meme-api.com/gimme/18')
-  const data = res.data.memes
-
-  return {
-      props: {
-          data
-      }
-  }
 }
